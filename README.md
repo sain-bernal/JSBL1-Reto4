@@ -1,260 +1,258 @@
-# Welcome to git practice!
-This repo is a safe place to practice the basics of git. Try out a rebase without risking any important code! Learn how to sync from an upstream repo! Preactice resolving merge conflicts!
-This guide assumes you have a comfortable knowledge of unix shell commands. If you want a refresher, [try here](https://github.com/you-dont-need/You-Dont-Need-GUI). This guide also assumes you have an existing github account and have [added your ssh key to it](https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/)
-This guide is designed as a space to practice git commands, not just teach them. If you are just after a quick reference, I recommend http://rogerdudler.github.io/git-guide/
+# ¡Bienvenido a la práctica de Git!
+Este repositorio es un lugar seguro para practicar los conceptos básicos de Git. ¡Prueba una rebase sin arriesgar ningún código importante! ¡Aprende a sincronizar desde un repositorio anterior! ¡Resolver conflictos de fusión de forma práctica!
+Esta guía supone que tienes un conocimiento cómodo de los comandos de shell de Unix. Si quieres un repaso, [prueba aquí](https://github.com/you-dont-need/You-Dont-Need-GUI). Esta guía también supone que tienes una cuenta de Github existente y que has [agregado tu clave SSH a ella](https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/)
+Esta guía está diseñada como un espacio para practicar los comandos de Git, no solo para enseñarlos. Si solo buscas una referencia rápida, te recomiendo http://rogerdudler.github.io/git-guide/
 
-## What are git and GitHub?
-Git is a version-control system. It tracks changes to files and allows people to collaborate on projects. Git is often used for software projects, but can be used for any project, and is especially powerful for projects based on text files. A project in git is called a "repository" (or repo for short). A repo is a bunch of files and directories. Each repo includes a .git directory which contains information on every change made to the repo.
+## ¿Qué son Git y GitHub?
+Git es un sistema de control de versiones. Realiza un seguimiento de los cambios en los archivos y permite que las personas colaboren en proyectos. Git se utiliza a menudo para proyectos de software, pero se puede utilizar para cualquier proyecto y es especialmente potente para proyectos basados ​​en archivos de texto. Un proyecto en Git se denomina "repositorio" (o repositorio para abreviar). Un repositorio es un conjunto de archivos y directorios. Cada repositorio incluye un directorio .git que contiene información sobre cada cambio realizado en el repositorio.
 
-GitHub is an online hosting service for git. While the bulk of your work with git takes place on your own computer, it is often useful to sync your local repo with a "remote" repo (on GitHub), allowing you to work on multiple computers or collaborate with others on a project.
-There are plenty of alternatives to GitHub, such as Stash, GitLab, or self-hosting your remote repos.
+GitHub es un servicio de alojamiento en línea para Git. Si bien la mayor parte de su trabajo con Git se lleva a cabo en su propia computadora, a menudo es útil sincronizar su repositorio local con un repositorio "remoto" (en GitHub), lo que le permite trabajar en varias computadoras o colaborar con otros en un proyecto.
+Hay muchas alternativas a GitHub, como Stash, GitLab o el alojamiento propio de sus repositorios remotos.
 
 ## Init
-To create a new repo, make a directory and use `git init` inside it.
+Para crear un nuevo repositorio, cree un directorio y use `git init` dentro de el.
 ```bash
-mkdir myDummyRepo
-cd myDummyRepo
+mkdir ISpractica
+cd ISpractica
 git init
 ```
-That's it, real simple. You should see a `.git` directory in there now.
+Eso es todo, muy simple. Deberías ver un `.git` directorio dentro.
 ```bash
-ls -a # directories starting with . are normally hidden, so use -a to show all
+ls -a # los directorios con inicial . son ocultos, por lo que se usa -a para mostrarlos
 ```
-We won't be using this new repo, so you can go ahead and delete it.
+No utilizaremos este nuevo repositorio, así que puedes continuar y eliminarlo.
 ```bash
-rm -rf myDummyRepo
+rm -rf ISpractica
 ```
+Bifurca este repositorio en tu cuenta de GitHub presionando el botón Bifurcar en GitHub (arriba a la derecha de la página de GitHub para este repositorio). Esto creará una bifurcación (copia) de este repositorio en tu cuenta de GitHub, creando un nuevo repositorio remoto que tú controlas. La bifurcación es útil cuando quieres usar un repositorio existente como base para tu propio proyecto. Un repositorio bifurcado también se puede usar para proponer cambios al repositorio original.
 
-## Fork
-Fork this repo into your github account by pressing the Fork button on github (top right of the github page for this repo). This will create a fork (copy) of this repo in your github account so you have control of it. Forking is useful when you want to propose changes to an existing repo or use the repo as the basis for your own project.
+Si no estás usando GitHub para administrar tu repositorio remoto, entonces crea tu propia copia remota de este repositorio en cualquier servicio de alojamiento remoto que estés usando.
 
 ## Clone
-`clone` copies an existing remote repo onto your computer. Let's clone the forked repo from the previous step. We will use ssh when cloning so that we can interact with the remote without having to worry about credentials.
+`clone` Crea una copia local de un repositorio remoto. Clonemos el repositorio bifurcado del paso anterior. 
 ```bash
-git clone git@github.com:danrs/xwing.git
+git clone https://github.com/rgfernan/git-practice.git
 ```
-If you're cloning a repo that you don't own, you will have to clone using https instead of ssh. You will also be unable to push changes to a repo that you don't own.
 
-## Add and Commit
-Now that we have a local clone of the repo, let's make a change to it.
+## Add y Commit
+Ahora que tenemos un clon local del repositorio, haremos un cambio en él.
 ```bash
-echo "It is a period of civil war" > crawl.txt
+echo "Este es un ejercicio de prueba de Git" > crawl.txt
 git status
 ```
-The `git status` command shows that we have an unstaged change. To record a change in git, we first have to stage that change to the index, and then commit all staged changes.
+El comando `git status` muestra que tenemos un cambio no preparado. Para registrar un cambio en Git, primero tenemos que preparar ese cambio en el índice y luego confirmar todos los cambios preparados.
 ```bash
-git add crawl.txt # stage the change
-git status # shows that our change is staged and ready to commit
-git commit -m "I made a change" # commit staged changes with a message
+git add crawl.txt # preparar el cambio
+git status # demuestra que nuestro cambio está preparado y listo para commit
+git commit -m "Hice un cambio" # Confirmar los cambios programados con un mensaje
 ```
-The staging step seems unnecessary in this case, but it is useful on complex projects where you are changing multiple files. Let's try an example
+El paso de preparación parece innecesario en este caso, pero es útil en proyectos complejos en los que se modifican varios archivos. Probemos con un ejemplo
 ```bash
-echo "Rebel spaceships, striking from a hidden base, have won their first victory against the evil Galactic Empire." >> crawl.txt # modify our first file
-echo "I love potatoes" > newFile.txt # create a new file
+echo "Las naves espaciales rebeldes, que atacan desde una base oculta, han conseguido su primera victoria contra el malvado Imperio Galáctico." >> crawl.txt # modificamos el primer archivo
+echo "Me gustan los tomates" > newFile.txt # creamos un archivo nuevo
 git status
 ```
-We now have two changes, and we want to commit them separately, which we can do using the staging command. Try running `git status` after each command below to see the changes you are making.
+Ahora tenemos dos cambios y queremos confirmarlos por separado, lo que podemos hacer con el comando staging. Prueba a ejecutar `git status` después de cada comando a continuación para ver los cambios que estás realizando.
 ```bash
 git add crawl.txt
-git commit -m "Started the crawl"
+git commit -m "Iniciando crawl"
 git add newFile.txt
-git commit -m "started my food blog"
+git commit -m "iniciando blog de comida"
 ```
 
-## `HEAD` and the git tree
-In git, the `HEAD` is the pointer to the current branch reference. That means it points to the current commit on the current branch. Moving the head is how we move to newer/older commits or move between branches. You can think of the head as a "you are here" marker. Let's take a look at where we are
+## `HEAD` y el git tree
+En Git, el `HEAD` es el puntero a la referencia de la rama actual. Eso significa que apunta a la confirmación actual en la rama actual. Mover el encabezado es la forma en que nos movemos a confirmaciones más nuevas o más antiguas o nos movemos entre ramas. Puedes pensar en el encabezado como un marcador de "estás aquí". Echemos un vistazo a dónde estamos
 ```bash
 git log
 ```
-You can see `HEAD` at the top, but this isn't a particularly clear visualisation of the git tree. If you have a graphical git program you can use it to examine the git tree, but I prefer to stay on the command line.
+Puedes ver "HEAD" en la parte superior, pero no es una visualización particularmente clara del árbol de Git. Si tienes un programa gráfico de Git, puedes usarlo para examinar el árbol de Git, pero yo prefiero quedarme en la línea de comandos.
 ```bash
-git log --graph --decorate --pretty=oneline --abbrev-commit --all # display a much prettier log
+git log --graph --decorate --pretty=oneline --abbrev-commit --all # Muestra un registro mucho más bonito.
 ```
-That's much better! We can see `HEAD` clearly at the top, pointing to the `master` branch. Other branches are visible too, but ignore those for now.
+¡Eso está mucho mejor! Podemos ver `HEAD` claramente en la parte superior, apuntando a la rama `master`. También se ven otras ramas, pero ignórelas por ahora.
 
-Let's save that command for us to use later. This step is optional, but recommended. Credit to [Conrad parker](http://blog.kfish.org/2010/04/git-lola.html) for the lola command.
+Guardemos ese comando para usarlo más tarde. Este paso es opcional, pero se recomienda. Gracias a [Conrad Parker](http://blog.kfish.org/2010/04/git-lola.html) por el comando lola.
 ```bash
 git config --global alias.lola 'log --graph --decorate --pretty=oneline --abbrev-commit --all'
 git lola
 ```
 
 ## diff
-`diff` lets you compare two commits
+`diff` te permite comparar dos commits
 
 ## Branches
-As you saw from `git lola`, our git tree has multiple branches. Let's list them all:
+Como viste en `git lola`, nuestro árbol git tiene múltiples ramas. Vamos a enumerarlas todas:
 ```bash
 git branch -l
 ```
-Each branch is a pointer to a snapshot of your project. If you are working on multiple different featurs, always use a new branch for each.
+Cada rama es un puntero a una instantánea de su proyecto. Si está trabajando en varias funciones diferentes, utilice siempre una rama nueva para cada una.
 
 ### New branch
-Let's make a new branch
+Vamos a crear una nueva rama
 ```bash
-git branch myFirstBranch # create a new branch
+git branch myFirstBranch # crear una nueva rama
 git status
 ```
-What has happened? Not a lot. We've created a new branch (snapshot of our code) but that's it. `HEAD` still points to the `master` branch, so any code changes we make will be performed on `master`, not our new branch. To move `HEAD` to a different branch, use the `checkout` command.
+¿Qué ha sucedido? No mucho. Hemos creado una nueva rama (una instantánea de nuestro código), pero eso es todo. `HEAD` todavía apunta a la rama `master`, por lo que cualquier cambio de código que hagamos se realizará en `master`, no en nuestra nueva rama. Para mover `HEAD` a una rama diferente, use el comando `checkout`.
 ```bash
 git checkout myFirstBranch
 git status
 ```
-Now, we can see `HEAD` is pointing to our new branch. Often, you will want to go to a branch immediately after creating it. You con do so in a single command:
+Ahora, podemos ver que `HEAD` apunta a nuestra nueva rama. A menudo, querrás ir a una rama inmediatamente después de crearla. Puedes hacerlo con un solo comando:
 ```bash
-git checkout -b "foodBlog" #create a new branch and switch to it immediately
+git checkout -b "foodBlog" #Crea una nueva rama y cámbiate a ella inmediatamente
 git status
 ```
 
-If we commit changes to our new branch, we will see it become different to our master branch:
+Si confirmamos los cambios en nuestra nueva rama, veremos que se vuelve diferente a nuestra rama maestra:
 ```bash
-echo "You have failed me for the last time" >> crawl.txt
+echo "Me has fallado por última vez." >> crawl.txt
 git add crawl.txt
-git commit -m "Added Vader quote"
+git commit -m "Se agregó una cita de Vader"
 git lola
-git diff master # compare two branches
+git diff master # compara dos ramas
 ```
 
 ## reset
-### Resetting to a commit
-Now, let's try altering the tree with `reset`. This command moves the branch that `HEAD` points to (and moves `HEAD` along with it). The command is called "reset" because it "resets" or "undoes" changes.
+### restablecer un commit
+Ahora, intentemos modificar el árbol con `reset`. Este comando mueve la rama a la que apunta `HEAD` (y mueve `HEAD` junto con ella). El comando se llama "reset" porque "restablece" o "deshace" los cambios.
 
-The `reset` command has several modes, so let's start with `--soft`. We will be resetting to the parent of the current commit using the shortcut `HEAD~`. You can also move to a specific commit by specifying the commit hash (visible in `git log` or `git lola`) instead of `HEAD~`.
+El comando `reset` tiene varios modos, así que comencemos con `--soft`. Restableceremos el padre de la confirmación actual usando el atajo `HEAD~`. También puedes moverte a una confirmación específica especificando el hash de la confirmación (visible en `git log` o `git lola`) en lugar de `HEAD~`.
 ```bash
 git checkout master
-echo "clean up" >> mess.txt
+echo "limpiar" >> mess.txt
 git add tamagotchi.txt
-git commit -m "added mess"
+git commit -m "error agregado"
 git reset --soft HEAD~
 git lola
 ```
-You can see that the master branch has moved to previous commit, and `HEAD` has moved along with it. None of the files have changed, though, and if we run `git status` we see that mess.txt is staged ready to be committed. `git reset --soft HEAD~` has essentially undone our latest commit.
+Puedes ver que la rama maestra se ha movido a la confirmación anterior, y `HEAD` se ha movido junto con ella. Sin embargo, ninguno de los archivos ha cambiado, y si ejecutamos `git status` vemos que mess.txt está preparado para ser confirmado. `git reset --soft HEAD~` básicamente ha deshecho nuestra última confirmación.
 
-Next up is the default behaviour for reset: `--mixed`. This will still not change any files, but it will unstage any changes as well as undoing commits. Run `git lola` and `git status` after each command below to see the changes you are making.
+A continuación, se muestra el comportamiento predeterminado para restablecer: `--mixed`. Esto no cambiará ningún archivo, pero deshará los cambios realizados y deshará las confirmaciones. Ejecute `git lola` y `git status` después de cada comando a continuación para ver los cambios que está realizando.
 ```bash
-git commit -m "commit the changes we just unstaged"
+git commit -m "Confirmar los cambios que acabamos de deshacer"
 git reset HEAD~
 ```
-After running the default (`--mixed`) `reset`, you can see that `mess.txt` is present, but unstaged. We have undone the commit and unstaged the file.
+Después de ejecutar el `reset` predeterminado (`--mixed`), puedes ver que `mess.txt` está presente, pero no está preparado. Hemos deshecho la confirmación y hemos sacado el archivo del modo preparado.
 
-Finally, the most dangerous option: `reset --hard`. This command will undo commits, unstage changes, AND remove those changes from any files. Your changes will be obliterated forever\* so use with caution!
+Por último, la opción más peligrosa: `reset --hard`. Este comando deshará las confirmaciones, deshabilitará los cambios y eliminará esos cambios de todos los archivos. Los cambios se borrarán para siempre, así que úselo con precaución.
 \*see Reflog
 ```bash
-git add . # stage everything we just unstaged
-git commit -m "commit the changes we just unstaged"
+git add . # preparamos todo lo que acabamos de deshacer
+git commit -m "Confirmar los cambios que acabamos de deshacer"
 git reset --hard HEAD~
 ```
-If you look at your working directory, you can see that `mess.txt` is nowhere to be found, and `git status` won't show anything either.
+Si miras tu directorio de trabajo, podrás ver que `mess.txt` no se encuentra en ninguna parte y `git status` tampoco muestra nada.
 
-In summary:
-`reset --soft`: Move branch that `HEAD` points to (undo commits)
-`reset`: (`--mixed`) Move `HEAD` branch and make the staging index look like the new HEAD location (undo commits and unstage changes)
-`reset --hard`: Move `HEAD` branch, make staging index look like HEAD, and make the working directory look like the index (undo commits, unstage changes, and remove all changes. Use with caution).
+En resumen:
+`reset --soft`: Mueve la rama a la que apunta `HEAD` (deshace confirmaciones)
+`reset`: (`--mixed`) Mueve la rama `HEAD` y hace que el índice de staging se parezca a la nueva ubicación de HEAD (deshace confirmaciones y deshace cambios de staging)
+`reset --hard`: Mueve la rama `HEAD`, hace que el índice de staging se parezca a HEAD y haz que el directorio de trabajo se parezca al índice (deshace confirmaciones, deshace cambios de staging y elimina todos los cambios. Úsalo con precaución).
 
-In the code above, we've been using `reset` to move to commits on the same branch, but there's nothing stopping you from using commits on different branches.
+En el código anterior, hemos estado usando `reset` para mover confirmaciones en la misma rama, pero no hay nada que te impida usar confirmaciones en diferentes ramas.
 
 #### Squashing commits
-Reset is handy as an undo button, but let's try a more interesting example. Imagine we are a busy developer and we've made a whole pile of useless commit messages.
+El botón de reset es útil como botón para deshacer, pero probemos un ejemplo más interesante. Imaginemos que somos un desarrollador ocupado y hemos creado un montón de mensajes de confirmación inútiles.
 ```bash
 git checkout -b butternut
 touch pumpkin.txt
 git add pumpkin.txt
-git commit -m "vegi"
-echo "dear diary" >> pumpkin.txt
+git commit -m "vegetariano"
+echo "querido diario" >> pumpkin.txt
 git add pumpkin.txt
-git commit -m "yep"
-echo "today I ate a radish" >> pumpkin.txt
+git commit -m "si"
+echo "Hoy comi un rabano" >> pumpkin.txt
 git add pumpkin.txt
 git commit -m "oops"
-echo "I mean, I ate a pumpkin. What a day" >> pumpkin.txt
+echo "O sea, me comi una calabaza. Que dia" >> pumpkin.txt
 git add pumpkin.txt
 git commit -m "max"
 git lola
 ```
-Oh dear. Those commit messages are useless. Lets replace them with a single commit message
+Esos mensajes de confirmación son inútiles. Reemplácelos con un único mensaje de confirmación.
 ```bash
 git reset HEAD~4
 git add pumpkin.txt
-git commit -m "Started a log of my food habits"
+git commit -m "Comence un registro de mis habitos alimentarios."
 ```
-Now return to the master branch for the rest of our work
+Ahora volvamos a la rama master para el resto de nuestro trabajo.
 ```bash
 git checkout master
 ```
 
 ### Resetting a file
-`reset` can also be used on a specific file. If you do this, `HEAD` won't move, but all other `reset` actions will be carried out. Let's try it. Run `git status` as you go to see the changes.
+`reset` También se puede utilizar en un archivo específico. Si haces esto, `HEAD` no se moverá, pero se llevarán a cabo todas las demás acciones de `reset`. Vamos a intentarlo. Ejecuta `git status` mientras avanzas para ver los cambios.
 ```bash
 git checkout master
-echo "The empire did nothing wrong" > protest.txt # make a change
-git add protest.txt # stage the file
-git reset protest.txt # unstage the file
+echo "El imperio no hizo nada malo" > protest.txt # haz un cambio
+git add protest.txt # prepara el archivo
+git reset protest.txt # quita archivo de staging
 ```
 
 ## checkout
 ### checking out a commit
-Like `reset`, the `checkout` command manipulates the git tree and moves `HEAD` to a specific commit. `git checkout [commit]` is similar to `git reset --hard [commit]`, but `checkout` only moves `HEAD`, not the branch that `HEAD` points to. I like to think of `checkout` as a way to move about the tree, while `reset` is a way to change the tree. Let's try it out.
+Al igual que `reset`, el comando `checkout` manipula el árbol git y mueve `HEAD` a un commit específico. `git checkout [commit]` es similar a `git reset --hard [commit]`, pero `checkout` solo mueve `HEAD`, no la rama a la que apunta `HEAD`. Me gusta pensar en `checkout` como una forma de moverse por el árbol, mientras que `reset` es una forma de cambiar el árbol. Probémoslo.
 
 ```bash
 git checkout HEAD~
 git lola
 ```
-After the checkout, we are now in a "detached head" state - no longer working on a branch. Unlike before when we did `git reset`, we can still see all our previous commits in the git tree, and we can return to our previous branch easily
+Después de la verificación, ahora estamos en un estado de "detached head"; ya no estamos trabajando en una rama. A diferencia de antes, cuando hicimos "git reset", todavía podemos ver todas nuestras confirmaciones anteriores en el árbol de git y podemos regresar a nuestra rama anterior fácilmente.
 ```bash
 git checkout master
 git lola
 ```
 
-`checkout` will also stop us if we have uncommitted changes (unlike `reset --hard`, which just destroys any of our changes without checking)
+`checkout` También nos detendrá si tenemos cambios no confirmados (a diferencia de `reset --hard`, que simplemente destruye cualquiera de nuestros cambios sin verificar)
 ```bash
-echo "stop" > crawl.txt
+echo "alto" > crawl.txt
 git status
 git checkout HEAD~
 ```
-git won't let us checkout because we have uncommitted changes
+Git no nos permite realizar el checkout porque tenemos cambios no confirmados
 
 ### checking out a file
-You can also use `checkout` on a file path. This will not move `HEAD`, but it will unstage any changes to that file in the index and also overwrite that file. `git checkout [branch] file` is equivalent to `git reset --hard [branch] file`, except that the latter command does not exist.
+También puedes usar `checkout` en una ruta de archivo. Esto no moverá `HEAD`, pero desmarcará cualquier cambio en ese archivo en el índice y también sobrescribirá ese archivo. `git checkout [branch] file` es equivalente a `git reset --hard [branch] file`, excepto que el último comando no existe.
 
-Let's use checkout to remove our unwanted changes to crawl
+Usemos checkout para eliminar nuestros cambios no deseados para rastrear
 ```bash
 git checkout master crawl
 ```
 
-Reset and checkout are both powerful tools, and with great power comes great complexity. I highly recommend [reading further](https://git-scm.com/book/en/v2/Git-Tools-Reset-Demystified) on these two commands.
+Reset y checkout son dos herramientas potentes, y un gran poder conlleva una gran complejidad. Recomiendo encarecidamente [leer más](https://git-scm.com/book/en/v2/Git-Tools-Reset-Demystified) sobre estos dos comandos.
 
 ## Reflog
-When I said that `reset --hard` would remove a commit forever, I wasn't quite telling the truth. `git reflog` is available as a last resort option. This command shows a reflog (history) of each time the tip of a branch was updated. If you have a good memory and good commit messages, you can use reflog to recover commits that are no longer in the git tree.
-
+Cuando dije que `reset --hard` eliminaría un commit para siempre, no estaba diciendo la verdad. `git reflog` está disponible como una opción de último recurso. Este comando muestra un reflog (historial) de cada vez que se actualizó la punta de una rama. Si tienes buena memoria y buenos mensajes de commit, puedes usar reflog para recuperar commits que ya no están en el árbol git.
 ```bash
-git reflog # show reflog for HEAD
-git reflog show --all # show reflog for all branches
+git reflog # muestra reflog para HEAD
+git reflog show --all # muestra reflog para todas las ramas
 
 git checkout blizzard
-git reset --hard HEAD~ # oops, I just lost a commit that I wanted
-git reflog show blizzard # show reflog for blizzard branch amnd search for lost commit
-git reset 8c87e88
-git status # check that the changes are as expected
-git reset --hard 8c87e88
+git reset --hard HEAD~ # acabo de perder un commit que quería
+git reflog show blizzard # muestra registro de referencias de la rama de Blizzard y busca commits perdidos
+git reset <commit-hash> # Coloque el hash de commit aquí, no <>
+git status # comprobar que los cambios sean los esperados
+git reset --hard <commit-hash> # Coloque el hash de commit aquí
 ```
 
 ## Stash and pop
-Sometimes you want to temporarily store some work but not commit it (eg if you want to quickly check out another branch, or if you realised you had started working on the wrong branch. `git stash` will let you do this. `git stash pop` will recover the most recently stashed changes (stashed changes are stored using a stack).
+A veces, desea almacenar temporalmente algún trabajo pero no confirmarlo (por ejemplo, si desea verificar rápidamente otra rama o si se da cuenta de que comenzó a trabajar en la rama incorrecta). `git stash` le permitirá hacer esto. `git stash pop` recuperará los cambios almacenados más recientemente (los cambios almacenados se almacenan usando una pila).
 ```bash
 git checkout master
-echo "temporary mcTempFace" >> crawl.txt
-git stash # temporarily store our work because this is the wong branch
-git checkout blizzard # move to correct branch
-git stash pop # recover stored work
+echo "mcTempFace temporal" >> crawl.txt
+git stash # Almacenamos temporalmente nuestro trabajo porque esta es la rama incorrecta.
+git checkout blizzard # pasar a la rama correcta
+git stash pop # recuperar trabajo almacenado
 git add .
-git commit -m "added something temporary"
+git commit -m "agrego algo temporal"
 ```
-Never use stash for long term storage, because I guarantee you will forget what you had stored and what branch it was meant to go on. If you want to store something for more than a day and you don't want it on any of your branches, just put it on a new branch in the relevane place.
+Nunca utilices stash para almacenar a largo plazo, porque te garantizo que olvidarás lo que habías almacenado y en qué rama debía ir. Si quieres almacenar algo durante más de un día y no lo quieres en ninguna de tus ramas, simplemente colócalo en una nueva rama en el lugar correspondiente.
 
 ## Merging
-When you want to incorporate code from one branch into another branch, it's time for a `merge`.
+Cuando quieres incorporar código de una rama a otra, es momento de realizar un "merge".
 
 ### Auto-resolved merge
-Most merges are straightforward affairs, and git handles them completely automatically
+La mayoría de los merges son asuntos sencillos y Git las gestiona de forma completamente automática.
 ```bash
 git checkout merge-target
 git merge simple-feature
@@ -262,100 +260,98 @@ git lola
 ```
 
 ### Merge conflicts
-#### Manual resolution
-Sometimes, a merge will require manual intervention
+#### Resolucion manual
+En ocasiones, un merge requiere intervencion manual
 ```bash
 git checkout merge-target
 git merge complex-feature
 git status
 ```
-Bup bow. The merge hit some conflicts, and git isn't sure how to resolve them. `git status` tells us that these conflicts are in `crawl.txt`, so open that file in your favourite editor.
+No hay problema. El merge ha generado algunos conflictos y Git no está seguro de cómo resolverlos. `git status` nos dice que estos conflictos están en `crawl.txt`, así que abre ese archivo en tu editor favorito.
 
-When you open `crawl.txt`, you will see X and Y. X is from branch X and Y from Y. To resolve the merge, edit the file as you see fit and then delete the markers. In this case, we should do Z. When you are finished, save your work and return to the terminal.
+Cuando abras `crawl.txt`, verás X e Y. X es de la rama X e Y de Y. Para resolver la fusión, edita el archivo como creas conveniente y luego elimina los marcadores. En este caso, deberíamos hacer Z. Cuando hayas terminado, guarda tu trabajo y regresa a la terminal.
 ```bash
 git add crawl.txt
 git merge --continue
 ```
 
 #### Ours vs theirs
-Sometimes when you have merge conflicts you will just want to take all the changes from a specific branch whenever there is a conflict.
+A veces, cuando tienes conflictos de merge, simplemente querrás tomar todos los cambios de una rama específica siempre que haya un conflicto.
 ```bash
 git checkout merge-target
 git merge complex-feature-2
 ```
 
-When merging, "ours" means the branch you are merging into, while "theirs" means the feature branch you are merging from. In our case, we are merging into `merge-target` and we are merging from `complex-feature-2`. We have decided that we only want the changes from `complex-feature-2`, aka "theirs", so we can avoid doing a full manual merge (hooray).
+Al fusionar, "ours" significa la rama en la que se está fusionando, mientras que "theirs" significa la rama de características desde la que se está fusionando. En nuestro caso, estamos fusionando en `merge-target` y estamos fusionando desde `complex-feature-2`. Hemos decidido que solo queremos los cambios de `complex-feature-2`, también conocido como "theirs", para que podamos evitar hacer un merge manual completo.
 ```bash
-git checkout --theirs funky.txt # take all changes from feature branch
+git checkout --theirs funky.txt # toma los cambios de la rama feature-2
 git add funky.txt
 git merge --continue
 ```
 
 ## Remotes
-A remote is a remote copy of a repository. In most projects, there is a single remote repository which is used as a central source of truth.
+Un repositorio remoto es una copia remota de un repositorio. En la mayoría de los proyectos, existe un único repositorio remoto que se utiliza como fuente central de información.
 
 ### Pull
-`pull` syncs your local branch with a remote branch. It works by performing a `fetch` (downloads latest data from the remote) and then `merge`s the fetched data into the current branch. In your case there will be nothing to update, as no changes have been made on the remote.
+`pull` sincroniza tu rama local con una rama remota. Funciona realizando una `fetch` (descarga los ultimos datos del remoto) y despues `merge`s los datos obtenidos en la rama actual. En su caso, no habrá nada que actualizar, ya que no se han realizado cambios en el remoto.
 ```bash
 git checkout master
 git pull origin master
 ```
 
 ### Push
-`push` syncs the remote branch with your local branch.
+`push` sincroniza la rama remota con su rama local.
 ```bash
 git checkout master
-echo "Porgs" >> crawl.txt
+echo "porgos" >> crawl.txt
 git add crawl.txt
-git commit -m "added a cute animal thing"
+git commit -m "agrega algo lindo de animal."
 git push origin master
 ```
 
 ### checkout branch from remote
-When you cloned this repository, it was created with a single remote, called `origin`. Let's try that now.
-
+Cuando clonaste este repositorio, se creó con un único control remoto, llamado "origin". Probemos eso ahora.
 ```bash
-git fetch # update remote info
-git checkout -b origin/check-me-out # create a new local branch to track remote branch
+git fetch # actualizar información remota
+git checkout -b origin/check-me-out # Crea una nueva rama local para realizar un seguimiento de la rama remota
 ```
 
 ### Adding remotes
-Since you have forked this repository, you want to keep it up to date with the original repository you forked it from. To do so, add the original repo as a new remote called "upstream:
+Dado que ha bifurcado este repositorio, desea mantenerlo actualizado con el repositorio original del que lo bifurcó. Para ello, agregue el repositorio original como un nuevo repositorio remoto llamado "upstream:
 ```bash
-git remote add upstream https://github.com/danrs/git-practice.git # add new remote
+git remote add upstream https://github.com/rgfernan/git-practice.git# agregar nuevo remoto
 ```
 
 ### Sync upstream (fetch and merge)
-Now that you've added a new upstream, you can sync upstream branches with local branches
+Ahora que ha agregado un nuevo upstream, puede sincronizar las ramas upstream con las ramas locales
 ```bash
 git checkout master
 git fetch upstream
 git merge upstream/master
 ```
-Again, this specific example won't do anything unless I've just updated the original repo
+Nuevamente, este ejemplo específico no hará nada a menos que haya actualizado el repositorio original.
 
 
 ## Rebasing
-Rebasing moves one or more commits to new base commit. If you want to incorporate changes from a parent branch into your working branch (but you don't want to merge back into the parent branch) then rebase is what you want. Warning: [don't rebase public branches](https://benmarshall.me/git-rebase/)
+El rebase mueve uno o más commits a una nueva confirmación base. Si desea incorporar cambios de una rama principal en su rama de trabajo (pero no desea volver a fusionarla con la rama principal), entonces la rebase es lo que necesita. Advertencia: [no rebase ramas públicas](https://benmarshall.me/git-rebase/)
 ### Auto-resolved rebase
-As with merging, most rebases are trivial.
+Al igual que con el merge, la mayoría de los rebase son triviales.
 ```bash
 git checkout rebel-alliance
 git lola
 git rebase hoth
 git lola
 ```
-Examining the git tree, you can see that the start of the `rebel-alliance` branch has moved to the end of the hoth branch
-
+Al examinar el árbol git, puedes ver que el inicio de la rama `rebel-alliance` se ha movido al final de la rama hoth.
 ### Merge conflicts while rebasing
-Some rebases will cause merge conflicts
+Alguns rebase provocarán conflictos de merge
 ```bash
 git checkout yoda
 git lola
 git rebase hoth
 git lola
 ```
-As you did in the merging section, open your favourite editor and resolve any merge conflicts. Use `git status` to see conflicting files. When you are done, add the files and continue rebaseing.
+Como hiciste en la sección de merge, abre tu editor favorito y resuelve los conflictos de merge. Usa `git status` para ver los archivos conflictivos. Cuando hayas terminado, agrega los archivos y continúa con el rebase.
 ```bash
 git add .
 git rebase --continue
@@ -366,8 +362,7 @@ git rebase --continue
 git checkout palp
 git rebase hoth
 ```
-During a rebase, git checks out the branch you are rebasing onto and replays your branch changes on top of it. Thus, "ours" means the branch you are rebasing onto and "theirs" beans the branch that is being rebased. In this case, we are rebasing palp ("theirs") onto hoth ("ours"). As with merging, we can make use of these terms to avoid a complex merge. Let's say we want to keep changes in the hoth branch whenever there's a conflict
-
+Durante un rebase, Git comprueba la rama en la que estás rebasando y reproduce los cambios de tu rama sobre ella. Por lo tanto, "ours" significa la rama en la que estás rebasando y "theirs" significa la rama que se está rebasando. En este caso, estamos rebasando palp ("theirs") en hoth ("ours"). Al igual que con el merge, podemos hacer uso de estos términos para evitar un merge complejo. Digamos que queremos mantener los cambios en la rama hoth siempre que haya un conflicto
 ```bash
 git checkout --ours padawan.txt
 git add padawan.txt
@@ -375,9 +370,9 @@ git rebase --continue
 ```
 
 ## Cherry-picking
-Cherry picking allows you to pick a commit from one branch and apply it to another. Lets say we want to apply commit with the message "PICK ME" from the `cherries` branch onto the `farm` branch.
+Cherry pick le permite elegir un commit de una rama y aplicarlo a otra. Digamos que queremos aplicar el commit con el mensaje "PICK ME" de la rama `cherries` a la rama `farm`.
 ```bash
 git checkout farm
-git cherry-pick a0486ef
+git cherry-pick <commit-hash> # inserta el commit correcto
 git lola
 ```
